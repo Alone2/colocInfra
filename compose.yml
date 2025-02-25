@@ -1,0 +1,60 @@
+services:
+  donetick:
+    image: docker.io/donetick/donetick
+    restart: unless-stopped
+    #ports:
+    #  - 2021:2021
+    volumes:
+      - ./data/donetick:/donetick-data
+      - ./config/donetick:/config
+    environment:
+      - DT_ENV=selfhosted
+      - DT_SQLITE_PATH=/donetick-data/donetick.db
+
+  spliit:
+    build:
+      context: ./dockerfiles/spliit
+    restart: unless-stopped
+    #ports:
+    #  - 3000:3000
+    env_file:
+      - path: ./config/postgres/postgres.env
+      - path: ./config/spliit/spliit.env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: docker.io/library/postgres:17
+    restart: unless-stopped
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    env_file:
+      - path: ./config/postgres/postgres.env
+
+  certbot:
+    build: ./dockerfiles/certbot
+    restart: always
+    container_name: auto_cert_renewal
+    volumes:
+      - ./data/letsencrypt:/etc/letsencrypt
+      - ./data/www/certbot:/var/www/certbot
+    depends_on:
+      - nginx
+
+  nginx:
+    build:
+      context: ./dockerfiles/nginx
+    restart: unless-stopped
+    volumes:
+      - ./data/www/certbot:/var/www/certbot:ro
+      - ./static:/var/www/html:ro
+      - ./data/letsencrypt:/etc/letsencrypt:ro
+      - ./config/nginx_active/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - spliit
+      - donetick
+
+
