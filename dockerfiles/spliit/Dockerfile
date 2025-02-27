@@ -12,16 +12,16 @@ ENV POSTGRES_PASSWORD=1234
 ENV POSTGRES_PRISMA_URL=postgresql://postgres:${POSTGRES_PASSWORD}@db
 ENV POSTGRES_URL_NON_POOLING=postgresql://postgres:${POSTGRES_PASSWORD}@db
 # app-minio
-ENV SPLIIT_NEXT_PUBLIC_ENABLE_EXPENSE_DOCUMENTS=false
-ENV SPLIIT_S3_UPLOAD_KEY=AAAAAAAAAAAAAAAAAAAA
-ENV SPLIIT_S3_UPLOAD_SECRET=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-ENV SPLIIT_S3_UPLOAD_BUCKET=spliit
-ENV SPLIIT_S3_UPLOAD_REGION=eu-north-1
-ENV SPLIIT_S3_UPLOAD_ENDPOINT=s3://minio.example.com
+ENV SPLIT_NEXT_PUBLIC_ENABLE_EXPENSE_DOCUMENTS=false
+ENV SPLIT_S3_UPLOAD_KEY=AAAAAAAAAAAAAAAAAAAA
+ENV SPLIT_S3_UPLOAD_SECRET=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ENV SPLIT_S3_UPLOAD_BUCKET=spliit
+ENV SPLIT_S3_UPLOAD_REGION=eu-north-1
+ENV SPLIT_S3_UPLOAD_ENDPOINT=s3://minio.example.com
 # app-openai
-ENV SPLIIT_NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT=false
-ENV SPLIIT_OPENAI_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-ENV SPLIIT_NEXT_PUBLIC_ENABLE_CATEGORY_EXTRACT=false
+ENV SPLIT_NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT=false
+ENV SPLIT_OPENAI_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+ENV SPLIT_NEXT_PUBLIC_ENABLE_CATEGORY_EXTRACT=false
 
 # Install dependencies
 RUN apk add --update --no-cache bash \
@@ -56,7 +56,13 @@ FROM alpine:latest AS runner
 
 # Install dependencies
 RUN apk add --update --no-cache npm \
-                                nodejs-current
+                                nodejs-current \
+                                ca-certificates \
+                                openssl
+
+# Run as unprivileged user
+USER split
+
 
 # Workdir for spliit
 WORKDIR /split
@@ -77,5 +83,5 @@ COPY ./entrypoint.sh ./entrypoint.sh
 EXPOSE 3000/tcp
 
 # entrypoint
-ENTRYPOINT ["/bin/sh", "/split/entrypoint.sh"]
+ENTRYPOINT ["/split/entrypoint.sh"]
 
