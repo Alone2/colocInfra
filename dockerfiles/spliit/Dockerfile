@@ -85,6 +85,11 @@ COPY --from=base /src/spliit/.next              ./.next
 
 COPY ./entrypoint.sh ./entrypoint.sh
 
+# Permissions
+USER   root
+RUN    chown -R 12346:12346 /split
+USER   split
+
 # Ports
 EXPOSE 3000/tcp
 
