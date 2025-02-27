@@ -43,7 +43,7 @@ RUN git clone ${REPOSITORY} && \
     git checkout ${VERSION} && \
     git remote add feature ${REPOSITORY_FEATURE} && \
     git fetch feature && \
-    git rebase ${FEATURE_BRANCH}
+    git rebase feature/${FEATURE_BRANCH}
 
 # Workdir for split
 WORKDIR /src/spliit
