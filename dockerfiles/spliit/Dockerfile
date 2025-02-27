@@ -37,6 +37,9 @@ RUN apk add --update --no-cache bash \
 # Workdir for source
 WORKDIR /src
 
+# Patch
+COPY ./patch.txt patch.txt
+
 # Clone Repo
 RUN git clone ${REPOSITORY} && \
     cd spliit && \
@@ -45,7 +48,8 @@ RUN git clone ${REPOSITORY} && \
     git checkout ${VERSION} && \
     git remote add feature ${REPOSITORY_FEATURE} && \
     git fetch feature && \
-    git rebase feature/${FEATURE_BRANCH}
+    git rebase feature/${FEATURE_BRANCH} && \
+    git apply ../patch.txt
 
 # Workdir for split
 WORKDIR /src/spliit

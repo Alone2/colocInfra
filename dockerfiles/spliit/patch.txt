@@ -1,0 +1,13 @@
+diff --git a/src/app/groups/[groupId]/expenses/expense-form.tsx b/src/app/groups/[groupId]/expenses/expense-form.tsx
+index fd197a6..e0c8995 100644
+--- a/src/app/groups/[groupId]/expenses/expense-form.tsx
++++ b/src/app/groups/[groupId]/expenses/expense-form.tsx
+@@ -189,7 +189,7 @@ export function ExpenseForm({
+           isReimbursement: expense.isReimbursement,
+           documents: expense.documents,
+           notes: expense.notes ?? '',
+-          recurrenceRule: expense.recurrenceRule,
++          recurrenceRule: expense.recurrenceRule ?? undefined,
+         }
+       : searchParams.get('reimbursement')
+       ? {
