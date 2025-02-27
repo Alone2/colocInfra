@@ -2,15 +2,18 @@ FROM alpine:latest AS base
 
 # Spliit version and repo
 ARG VERSION="1.15.0"
-ARG REPOSITORY="https://github.com/spliit-app/spliit"
+ARG REPOSITORY="https://github.com/spliit-app/spliit.git"
+
+ARG REPOSITORY_FEATURE="https://github.com/trandall2/spliit_recurring_expense.git"
+ARG FEATURE_BRANCH="attempt_to_add_recurring_expense_functionality"
 
 # Env varlables
 ARG NEXT_TELEMETRY_DISABLED=1
 
 # db
 ENV POSTGRES_PASSWORD=1234
-ENV POSTGRES_PRISMA_URL=postgresql://postgres:${POSTGRES_PASSWORD}@db
-ENV POSTGRES_URL_NON_POOLING=postgresql://postgres:${POSTGRES_PASSWORD}@db
+ENV POSTGRES_PRISMA_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres
+ENV POSTGRES_URL_NON_POOLING=postgresql://postgres:${POSTGRES_PASSWORD}@postgres
 # app-minio
 ENV SPLIT_NEXT_PUBLIC_ENABLE_EXPENSE_DOCUMENTS=false
 ENV SPLIT_S3_UPLOAD_KEY=AAAAAAAAAAAAAAAAAAAA
@@ -36,6 +39,9 @@ WORKDIR /src
 
 # Clone Repo
 RUN git clone ${REPOSITORY} && \
+    git remote add feature ${REPOSITORY_FEATURE} && \
+    git fetch feature && \
+    git rebase ${FEATURE_BRANCH} && \
     cd spliit && \
     git checkout ${VERSION}
 
