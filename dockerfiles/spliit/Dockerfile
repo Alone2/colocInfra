@@ -40,6 +40,8 @@ WORKDIR /src
 # Clone Repo
 RUN git clone ${REPOSITORY} && \
     cd spliit && \
+    git config --global user.email "split@a1n.ch" && \
+    git config --global user.name "split" && \
     git checkout ${VERSION} && \
     git remote add feature ${REPOSITORY_FEATURE} && \
     git fetch feature && \
