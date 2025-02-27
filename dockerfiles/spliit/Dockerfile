@@ -60,9 +60,15 @@ RUN apk add --update --no-cache npm \
                                 ca-certificates \
                                 openssl
 
+# add split user
+RUN    addgroup --gid 12346 -S split && \
+       adduser --disabled-password --uid 12346 --ingroup split split && \
+       mkdir /split && \
+       chown -R 12346:12346 /split
+
+
 # Run as unprivileged user
 USER split
-
 
 # Workdir for spliit
 WORKDIR /split

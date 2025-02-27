@@ -50,6 +50,9 @@ services:
       - ./static:/var/www/html:ro
       - ./data/letsencrypt:/etc/letsencrypt:ro
       - ./config/nginx:/etc/nginx:ro
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/config.d:/etc/nginx/config.d:ro
+
     ports:
       - 80:80
       - 443:443
