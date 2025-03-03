@@ -4,8 +4,8 @@ FROM alpine:latest AS base
 ARG VERSION="1.15.0"
 ARG REPOSITORY="https://github.com/spliit-app/spliit.git"
 
-ARG REPOSITORY_FEATURE="https://github.com/trandall2/spliit_recurring_expense.git"
-ARG FEATURE_BRANCH="attempt_to_add_recurring_expense_functionality"
+##ARG REPOSITORY_FEATURE="https://github.com/trandall2/spliit_recurring_expense.git"
+##ARG FEATURE_BRANCH="attempt_to_add_recurring_expense_functionality"
 
 # Env varlables
 ARG NEXT_TELEMETRY_DISABLED=1
@@ -43,13 +43,18 @@ COPY ./patch.txt patch.txt
 # Clone Repo
 RUN git clone ${REPOSITORY} && \
     cd spliit && \
-    git config --global user.email "split@a1n.ch" && \
-    git config --global user.name "split" && \
-    git checkout ${VERSION} && \
-    git remote add feature ${REPOSITORY_FEATURE} && \
-    git fetch feature && \
-    git rebase feature/${FEATURE_BRANCH} && \
-    git apply ../patch.txt
+    git checkout ${VERSION} 
+    
+### Clone Repo
+##RUN git clone ${REPOSITORY} && \
+##    cd spliit && \
+##    git config --global user.email "split@a1n.ch" && \
+##    git config --global user.name "split" && \
+##    git checkout ${VERSION} && \
+##    git remote add feature ${REPOSITORY_FEATURE} && \
+##    git fetch feature && \
+##    git rebase feature/${FEATURE_BRANCH} && \
+##    git apply ../patch.txt
 
 # Workdir for split
 WORKDIR /src/spliit
