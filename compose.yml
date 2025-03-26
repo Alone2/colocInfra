@@ -46,11 +46,11 @@ services:
       context: ./dockerfiles/nginx
     restart: unless-stopped
     volumes:
-      - ./data/www/certbot:/var/www/certbot:roz
-      - ./static:/var/www/html:roz
-      - ./data/letsencrypt:/etc/letsencrypt:roz
-      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:roz
-      - ./config/nginx/config.d:/etc/nginx/config.d:roz
+      - ./data/www/certbot:/var/www/certbot:ro
+      - ./static:/var/www/html:ro
+      - ./data/letsencrypt:/etc/letsencrypt:ro
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/config.d:/etc/nginx/config.d:ro
 
     ports:
       - 80:80
