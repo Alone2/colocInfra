@@ -5,8 +5,8 @@ services:
     #ports:
     #  - 2021:2021
     volumes:
-      - ./data/donetick:/donetick-data
-      - ./config/donetick:/config
+      - ./data/donetick:/donetick-data:z
+      - ./config/donetick:/config:z
     environment:
       - DT_ENV=selfhosted
       - DT_SQLITE_PATH=/donetick-data/donetick.db
@@ -27,7 +27,7 @@ services:
     image: docker.io/library/postgres:17
     restart: unless-stopped
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data:z
     env_file:
       - ./config/postgres/postgres.env
 
@@ -36,8 +36,8 @@ services:
     restart: always
     container_name: auto_cert_renewal
     volumes:
-      - ./data/letsencrypt:/etc/letsencrypt
-      - ./data/www/certbot:/var/www/certbot
+      - ./data/letsencrypt:/etc/letsencrypt:z
+      - ./data/www/certbot:/var/www/certbot:z
     depends_on:
       - nginx
 
@@ -46,11 +46,11 @@ services:
       context: ./dockerfiles/nginx
     restart: unless-stopped
     volumes:
-      - ./data/www/certbot:/var/www/certbot:ro
-      - ./static:/var/www/html:ro
-      - ./data/letsencrypt:/etc/letsencrypt:ro
-      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./config/nginx/config.d:/etc/nginx/config.d:ro
+      - ./data/www/certbot:/var/www/certbot:roz
+      - ./static:/var/www/html:roz
+      - ./data/letsencrypt:/etc/letsencrypt:roz
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:roz
+      - ./config/nginx/config.d:/etc/nginx/config.d:roz
 
     ports:
       - 80:80
