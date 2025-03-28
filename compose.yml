@@ -28,6 +28,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/postgres:/var/lib/postgresql/data:z
+      - ./backups:/backups:z
     env_file:
       - ./config/postgres/postgres.env
 
